@@ -17,6 +17,19 @@ from itertools import cycle
 
 bot = commands.Bot(command_prefix = "")
 ###########################################-----Events-----####################################################################
+
+import os
+for cog in os.listdir(os.path.abspath("Cog")):
+    if cog.endswith(".py"):
+        try:
+            cog = f"Cog.{cog.replace('.py','')}"
+            bot.load_extension(cog)
+            print("Loaded ",cog)
+        
+        except Exception as e:
+            print(f"{cog} cannot be loaded")
+            raise e
+
 @bot.event
 async def on_ready():
     await bot.change_presence(status = discord.Status.idle , activity = discord.Game("Havana"))
@@ -425,7 +438,7 @@ class Music(commands.Cog):
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.send('An error occurred: {}'.format(str(error)))
 
-###########################################-----Join-----#######################################################
+ ###########################################-----Join-----#######################################################
     @commands.command(name='join', invoke_without_subcommand=True)
     async def _join(self, ctx: commands.Context):
         """Join the voice channel author is in"""
@@ -437,7 +450,7 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
-###########################################-----Summon-----#######################################################
+ ###########################################-----Summon-----#######################################################
     @commands.command(name='summon')
     @commands.has_permissions(manage_guild=True)
     async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
@@ -455,7 +468,7 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
-###########################################-----Leave-----#######################################################
+ ###########################################-----Leave-----#######################################################
     @commands.command(name='leave', aliases=['disconnect'])
     @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
@@ -467,7 +480,7 @@ class Music(commands.Cog):
         await ctx.voice_state.stop()
         del self.voice_states[ctx.guild.id]
 
-###########################################-----Volume-----#######################################################
+ ###########################################-----Volume-----#######################################################
     @commands.command(name='volume')
     async def _volume(self, ctx: commands.Context, *, volume : int = 30):
         """Sets the volume of the player."""
@@ -481,7 +494,7 @@ class Music(commands.Cog):
         ctx.voice_state.current.source.volume = volume / 100
         await ctx.send('Volume of the player set to {}%'.format(volume))
             
-###########################################-----Current-----#######################################################
+ ###########################################-----Current-----#######################################################
     @commands.command(name='now', aliases=['current', 'playing'])
     async def _now(self, ctx: commands.Context):
         """Displays the currently playing song."""
@@ -489,7 +502,7 @@ class Music(commands.Cog):
             return await ctx.send('Not connected to any voice channel.')
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
-###########################################-----Pause-----#######################################################
+ ##########################################-----Pause-----#######################################################
     @commands.command(name='pause')
     @commands.has_permissions(manage_guild=True)
     async def _pause(self, ctx: commands.Context):
@@ -513,7 +526,7 @@ class Music(commands.Cog):
         await ctx.message.add_reaction('⏯')
         '''
 
-###########################################-----Resume-----#######################################################
+ ###########################################-----Resume-----#######################################################
     @commands.command(name='resume')
     @commands.has_permissions(manage_guild=True)
     async def _resume(self, ctx: commands.Context):
@@ -536,7 +549,7 @@ class Music(commands.Cog):
         else:
             await ctx.send("Not playing any music right now... ")
 
-###########################################-----Stop-----#######################################################
+ ###########################################-----Stop-----#######################################################
     @commands.command(name='stop')
     @commands.has_permissions(manage_guild=True)
     async def _stop(self, ctx: commands.Context):
@@ -550,7 +563,7 @@ class Music(commands.Cog):
         else:
             await ctx.send("Not playing any music right now...")
         
-###########################################-----Skip-----#######################################################
+ ##########################################-----Skip-----#######################################################
     @commands.command(name='skip')
     async def _skip(self, ctx: commands.Context):
         """Vote to skip a song. The requester can automatically skip.
@@ -578,7 +591,7 @@ class Music(commands.Cog):
         else:
             await ctx.send('You have already voted to skip this song.')
 
-###########################################-----Queue-----#######################################################
+ ###########################################-----Queue-----#######################################################
     @commands.command(name='queue')
     async def _queue(self, ctx: commands.Context, *, page: int = 1):
         """Shows the player's queue.
@@ -604,7 +617,7 @@ class Music(commands.Cog):
                  .set_footer(text='Viewing page {}/{}'.format(page, pages)))
         await ctx.send(embed=embed)
 
-###########################################-----Shuffle-----#######################################################
+ ###########################################-----Shuffle-----#######################################################
     @commands.command(name='shuffle')
     async def _shuffle(self, ctx: commands.Context):
         """Shuffles the queue."""
@@ -617,7 +630,7 @@ class Music(commands.Cog):
         ctx.voice_state.songs.shuffle()
         await ctx.message.add_reaction('✅')
 
-###########################################-----Remove-----#######################################################
+ ###########################################-----Remove-----#######################################################
     @commands.command(name='remove')
     async def _remove(self, ctx: commands.Context, index: int):
         """Removes a song from the queue at a given index."""
@@ -630,7 +643,7 @@ class Music(commands.Cog):
         ctx.voice_state.songs.remove(index - 1)
         return await ctx.message.add_reaction('✅')
 
-###########################################-----Play-----#######################################################
+ ###########################################-----Play-----#######################################################
     @commands.command(name='play')
     async def _play(self, ctx: commands.Context, *, search: str ):
         """Plays a song.
@@ -664,7 +677,7 @@ class Music(commands.Cog):
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError('Bot is already in a voice channel.')
 
-###########################################-----My songlist-----#####################################################
+ ###########################################-----My songlist-----#####################################################
     @commands.command(name='fav')
     async def _fav(self, ctx: commands.Context):
         """Shows a list of fav songs.
