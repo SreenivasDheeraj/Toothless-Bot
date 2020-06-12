@@ -5,6 +5,7 @@ import functools
 import itertools
 import math
 import random
+import asyncpg
 
 import discord
 import youtube_dl
@@ -18,11 +19,14 @@ from itertools import cycle
 bot = commands.Bot(command_prefix = "")
 ###########################################-----Events-----####################################################################
 
+async def create_db_pool():
+    bot.pg_con = await asyncpg.create_pool(database = "Discord_test", user ="postgres", password = "Dheeru@1612")
+
 import os
-for cog in os.listdir(os.path.abspath("Cog")):
+for cog in os.listdir(os.path.abspath("Cogs")):
     if cog.endswith(".py"):
         try:
-            cog = f"Cog.{cog.replace('.py','')}"
+            cog = f"Cogs.{cog.replace('.py','')}"
             bot.load_extension(cog)
             print("Loaded ",cog)
         
@@ -703,6 +707,7 @@ class Music(commands.Cog):
                     await ctx.send('Enqueued {}'.format(str(source)))
         return
 
+bot.loop.run_until_complete(create_db_pool())
 
 bot.add_cog(Music(bot))
 
