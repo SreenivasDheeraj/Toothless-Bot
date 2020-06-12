@@ -13,7 +13,7 @@ class Levels (commands.Cog):
         cur_xp = user['xp']
         cur_lvl = user['lvl']
 
-        if cur_lvl <= int(cur_xp ** (1/3)):
+        if cur_lvl < int(cur_xp ** (1/3)):
             await self.bot.pg_con.execute("UPDATE users SET lvl = $1 WHERE user_id = $2 AND guild_id = $3", cur_lvl + 1, user['user_id'], user['guild_id'])
             return True
         else: 
