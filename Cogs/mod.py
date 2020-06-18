@@ -63,7 +63,8 @@ class Moderation_Commands(commands.Cog):
    ############################################-------Clear Messages by User------#######################################################
 
     @commands.command(name = 'purge_user', pass_context = True, aliases = ['clear_user', 'purgeuser'])
-    async def purge_user(self, ctx, member: discord.Member, num_messages: typing.Optional[int] = 100):
+    @commands.has_permissions(manage_messages = True)
+    async def purge_user(self, ctx, member: discord.Member, num_messages: int = 100):
         """Clear all messagges of <User> withing the last messages"""
         channel = ctx.message.channel
         member = ctx.author if not member else member
