@@ -53,12 +53,25 @@ class Moderation_Commands(commands.Cog):
 
   ############################################-------Clear Messages------#######################################################
 
-    @commands.command(name = "clear", pass_context = True )
+    @commands.command(name = "clear", pass_context = True, aliases = ["purge"] )
     @commands.has_permissions(manage_messages = True)
     async def clear(self , context, amount = 5 ):
         '''Delete a specified number of(default : 5) messages from server.'''
         await context.channel.purge( limit=amount)
         print(f"Cleared {amount} meassages") 
+
+   ############################################-------Clear Messages by User------#######################################################
+
+    @commands.command(name = 'purge_user', pass_context = True, aliases = ['clear_user', 'purgeuser'])
+    async def purge_user(self, ctx, member: discord.Member, num_messages: typing.Optional[int] = 100):
+        """Clear all messagges of <User> withing the last messages"""
+        channel = ctx.message.channel
+        member = ctx.author if not member else member
+        def check(msg):
+            return msg.author.id == member.id
+
+        await ctx.message.delete()
+        await channel.purge(limit=num_messages, check=check, before=None)
 
   ##########################################-----Unban a member-----################################################################
     @commands.command(name = "unban" , pass_context = True)
