@@ -6,7 +6,7 @@ import itertools
 import math
 import random
 import time
-
+from googlesearch import search
 import discord
 import youtube_dl
 from async_timeout import timeout
@@ -94,6 +94,13 @@ class Basic_Commands(commands.Cog):
         await context.channel.send(random.choice(possible_responses) + context.message.author.mention)
         return
 
+    
+    @commands.command(name='google', pass_context=True)
+    async def google(self, context, query=None): 
+        # to search 
+        for j in search(query, tld="co.in", num=10, stop=10, pause=2): 
+            await context.send(j)
+    
     @tasks.loop(seconds=10)
     async def change_status(self):
         await self.bot.change_presence(activity = discord.Game(next(self.bot.status)))

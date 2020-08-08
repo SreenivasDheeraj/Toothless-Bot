@@ -6,6 +6,7 @@ import itertools
 import math
 import random
 import asyncpg
+from googlesearch import search
 
 import discord
 import youtube_dl
@@ -16,7 +17,7 @@ from itertools import cycle
 
 ###########################################-----Bot Initialisation-----#######################################################
 
-bot = commands.Bot(command_prefix = "")
+bot = commands.Bot(command_prefix = ",")
 ###########################################-----Events-----####################################################################
 
 async def create_db_pool():

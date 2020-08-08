@@ -396,6 +396,8 @@ class Music(commands.Cog):
         if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
             ctx.voice_state.voice.resume()
             await ctx.message.add_reaction('⏯')
+        elif ctx.voice_state.is_playing:
+            await ctx.send("Not paused any music right now... ")
         else:
             await ctx.send("Not playing any music right now... ")
 
