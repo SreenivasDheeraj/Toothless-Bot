@@ -96,10 +96,10 @@ class Basic_Commands(commands.Cog):
 
     
     @commands.command(name='google', pass_context=True)
-    async def google(self, context, query=None): 
+    async def google(self, ctx,*, query): 
         # to search 
-        for j in search(query, tld="co.in", num=10, stop=10, pause=2): 
-            await context.send(j)
+        for j in search(query, tld="com", num=5, stop=5, pause=2): 
+            await ctx.send(j)
     
     @tasks.loop(seconds=10)
     async def change_status(self):

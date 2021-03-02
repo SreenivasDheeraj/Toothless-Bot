@@ -19,7 +19,6 @@ from itertools import cycle
 class Moderation_Commands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-
   ##########################################-----Kick-----#################################################################
 
     @commands.command( name = 'kick', pass_context = True )
@@ -50,7 +49,6 @@ class Moderation_Commands(commands.Cog):
         embed=discord.Embed(title="User banned!", description=("**"+user.mention+"** was banned by **"+str(context.message.author.mention)+"** because "+reasons).format(user, context.message.author), color=0xff00f6)
         await context.send( embed = embed )
         await user.send( embed = embed )
-
   ############################################-------Clear Messages------#######################################################
 
     @commands.command(name = "clear", pass_context = True, aliases = ["purge"] )
@@ -75,6 +73,26 @@ class Moderation_Commands(commands.Cog):
         await channel.purge(limit = amount, check = check, before = None)
         print(f"Cleared meassages by {member} in last {amount} messages. ")
 
+    @commands.command(aliases=['del','prune'])
+    async def clear_m(self, ctx, limit : int = 100, member:discord.Member=None):
+        '''Clean a number of messages'''
+        if member is None:
+            await ctx.purge(limit=limit+1)
+        else:
+            async for message in ctx.channel.history(limit=limit+1):
+                if message.author is member:
+                    await message.delete()
+   
+    @commands.command()
+    async def mute(self, ctx, member : discord.Member = None):
+
+        if member is None:
+            await ctx.send('Please pass in a valid user')
+            return
+
+        await member.add_roles('Muted0')
+        await ctx.send(f'{str(member)} was muted!')
+    
   ##########################################-----Unban a member-----################################################################
     @commands.command(name = "unban" , pass_context = True)
     async def unban(self , context , * , member ):

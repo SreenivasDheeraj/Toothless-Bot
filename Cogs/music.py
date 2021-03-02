@@ -230,7 +230,7 @@ class VoiceState:
                     async with timeout(180):  # 3 minutes
                         self.current = await self.songs.get()
                 except asyncio.TimeoutError:
-                    self.bot.loop.create_task(self.stop())
+                    self.bot.loop.create_task(self.stop)
                     return
 
             self.current.source.volume = self._volume
@@ -257,7 +257,6 @@ class VoiceState:
         if self.voice:
             await self.voice.disconnect()
             self.voice = None
-
 
 class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
